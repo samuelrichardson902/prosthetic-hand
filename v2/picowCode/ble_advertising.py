@@ -19,14 +19,22 @@ def advertising_payload(limited_disc=False, br_edr=False, name=None, services=No
         nonlocal payload
         payload += struct.pack("BB", len(value) + 1, adv_type) + value
 
+    # Add flags
     _append(
         _ADV_TYPE_FLAGS,
         struct.pack("B", (0x01 if limited_disc else 0x02) + (0x18 if br_edr else 0x04)),
     )
 
+    # Add name if it's provided
     if name:
-        _append(_ADV_TYPE_NAME, name)
+        # Ensure the name is encoded to a byte string
+        name_bytes = name.encode('utf-8')
+        if len(name_bytes) <= 31:  # Check the name length to ensure it fits the advertising packet
+            _append(_ADV_TYPE_NAME, name_bytes)
+        else:
+            print(f"Warning: Name '{name}' is too long and will be truncated.")
 
+    # Add services (UUIDs)
     if services:
         for uuid in services:
             b = bytes(uuid)
@@ -37,10 +45,12 @@ def advertising_payload(limited_disc=False, br_edr=False, name=None, services=No
             elif len(b) == 16:
                 _append(_ADV_TYPE_UUID128_COMPLETE, b)
 
+    # Add appearance type if provided
     if appearance:
         _append(_ADV_TYPE_APPEARANCE, struct.pack("<h", appearance))
 
     return payload
+
 
 
 def decode_field(payload, adv_type):
@@ -81,3 +91,4 @@ def demo():
 
 if __name__ == "__main__":
     demo()
+

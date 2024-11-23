@@ -34,7 +34,7 @@ _UART_SERVICE = (
 
 
 class BLESimplePeripheral:
-    def __init__(self, ble, name="mpy-uart"):
+    def __init__(self, ble, name="sam-hand"):
         self._ble = ble
         self._ble.active(True)
         self._ble.irq(self._irq)
@@ -78,7 +78,7 @@ class BLESimplePeripheral:
 def demo():
     led_onboard = Pin("LED", Pin.OUT)  # Use "LED" for onboard LED pin
     ble = bluetooth.BLE()
-    p = BLESimplePeripheral(ble)
+    p = BLESimplePeripheral(ble, name="RoboHand")
 
     def on_rx(v):
         """Callback for receiving data."""
@@ -103,4 +103,5 @@ def demo():
 
 if __name__ == "__main__":
     demo()
+
 

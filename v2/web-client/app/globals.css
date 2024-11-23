@@ -5,12 +5,18 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --primary: #3498db;
+  --primary-light: #85c1e9;
+  --danger: #e74c3c;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --primary: #2980b9;
+    --primary-light: #5499c7;
+    --danger: #c0392b;
   }
 }
 
@@ -18,4 +24,78 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.mainContent {
+  display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center;    /* Centers vertically */
+  height: 100vh;          /* Full viewport height */
+  width: 100vw;           /* Full viewport width */
+  text-align: center;
+}
+
+.spinner {
+  border: 4px solid #f3f3f3; /* Light grey */
+  border-top: 4px solid var(--primary); /* Primary color */
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Button styles */
+button {
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 10px;
+}
+
+button:disabled {
+  background-color: var(--primary-light);
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background-color: var(--primary-light);
+}
+
+button.disconnect {
+  background-color: var(--danger);
+}
+
+button.disconnect:hover {
+  background-color: var(--danger-light);
+}
+
+/* Responsive styling for mobile */
+@media (max-width: 600px) {
+  button {
+    width: 90%;
+    padding: 15px;
+    font-size: 1.2rem;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+  }
 }
