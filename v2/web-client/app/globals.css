@@ -69,15 +69,6 @@ button {
   margin: 10px;
 }
 
-button:disabled {
-  background-color: var(--primary-light);
-  cursor: not-allowed;
-}
-
-button:hover:not(:disabled) {
-  background-color: var(--primary-light);
-}
-
 button.disconnect {
   background-color: var(--danger);
 }
