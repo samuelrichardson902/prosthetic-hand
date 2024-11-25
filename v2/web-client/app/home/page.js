@@ -1,12 +1,14 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { handleLightToggle, handleDisconnect } from "../components/picoControl";
+import { handleLightToggle, handleDisconnect } from "../utils/picoControl";
 import HandTracker from "../components/handTracker";
+import { getFingerStates } from "../utils/landmarkAnalysis";
 
 export default function Home() {
   const router = useRouter();
-  const [handLandmarks, setHandLandmarks] = useState(null);
+  const [hands, setHands] = useState(null);
+  const [fingerStates, setFingerStates] = useState(null);
 
   const handleDisconnectAttempt = async () => {
     try {
@@ -17,12 +19,11 @@ export default function Home() {
     }
   };
 
-  const processHandLandmarks = (landmarks) => {
-    setHandLandmarks(landmarks);
-
-    if (landmarks && landmarks.length > 0) {
-      console.log("hand in frame");
-    }
+  const processHandLandmarks = (hands) => {
+    setHands(hands);
+    const states = getFingerStates(hands);
+    setFingerStates(states);
+    console.log(states);
   };
 
   return (
@@ -48,6 +49,8 @@ export default function Home() {
             onLandmarksDetected={processHandLandmarks}
             enabled={true}
           />
+
+          {fingerStates && <HandVisualization handStates={fingerStates} />}
         </div>
       </div>
     </div>

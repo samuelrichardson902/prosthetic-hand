@@ -2,7 +2,7 @@ import {
   connectToPicoW,
   sendCommand,
   disconnectFromPicoW,
-} from "../utils/picoBluetooth";
+} from "./picoBluetooth";
 
 let isConnected = false;
 let isLightOn = false;

@@ -2,17 +2,19 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import HandTracker from "../components/handTracker";
+import { getFingerStates } from "../utils/landmarkAnalysis";
+import HandVisualization from "../components/handVisualizer";
 
 export default function DemoPage() {
   const router = useRouter();
-  const [handLandmarks, setHandLandmarks] = useState(null);
+  const [hands, setHands] = useState(null);
+  const [fingerStates, setFingerStates] = useState(null);
 
-  const processHandLandmarks = (landmarks) => {
-    setHandLandmarks(landmarks);
-
-    if (landmarks && landmarks.length > 0) {
-      console.log("hand in frame");
-    }
+  const processHandLandmarks = (hands) => {
+    setHands(hands);
+    const states = getFingerStates(hands);
+    setFingerStates(states);
+    console.log(states);
   };
 
   return (
@@ -30,6 +32,8 @@ export default function DemoPage() {
             onLandmarksDetected={processHandLandmarks}
             enabled={true}
           />
+
+          {fingerStates && <HandVisualization handStates={fingerStates} />}
         </div>
       </div>
     </div>

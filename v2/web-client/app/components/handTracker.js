@@ -145,27 +145,44 @@ const HandTracker = ({
           );
 
           if (results.landmarks) {
-            onLandmarksDetected(results.landmarks);
+            const detectedHands = results.landmarks.map(
+              (handLandmarks, index) => {
+                const handedness =
+                  results.handednesses && results.handednesses[index]
+                    ? results.handednesses[index][0]
+                    : null;
 
-            results.landmarks.forEach((handLandmarks) => {
+                return {
+                  landmarks: handLandmarks,
+                  handType: handedness ? handedness.categoryName : null, // 'Left' or 'Right'
+                  confidence: handedness ? handedness.score : null, // Confidence score
+                };
+              }
+            );
+
+            // Pass detected hands to the callback
+            onLandmarksDetected(detectedHands);
+
+            // Visualize hands on canvas
+            detectedHands.forEach(({ landmarks, handType, confidence }) => {
               // Draw connections
               ctx.strokeStyle = connectionColor;
               ctx.lineWidth = connectionWidth;
               connections.forEach(([start, end]) => {
                 ctx.beginPath();
                 ctx.moveTo(
-                  handLandmarks[start].x * canvas.width,
-                  handLandmarks[start].y * canvas.height
+                  landmarks[start].x * canvas.width,
+                  landmarks[start].y * canvas.height
                 );
                 ctx.lineTo(
-                  handLandmarks[end].x * canvas.width,
-                  handLandmarks[end].y * canvas.height
+                  landmarks[end].x * canvas.width,
+                  landmarks[end].y * canvas.height
                 );
                 ctx.stroke();
               });
 
               // Draw landmarks
-              handLandmarks.forEach((landmark) => {
+              landmarks.forEach((landmark) => {
                 ctx.beginPath();
                 ctx.arc(
                   landmark.x * canvas.width,
@@ -177,6 +194,17 @@ const HandTracker = ({
                 ctx.fillStyle = landmarkColor;
                 ctx.fill();
               });
+
+              // Draw hand type and confidence above the wrist (landmark 0)
+              if (handType && confidence !== null) {
+                ctx.font = "16px Arial";
+                ctx.fillStyle = "white";
+                ctx.fillText(
+                  `${handType} (${confidence.toFixed(2)})`,
+                  landmarks[0].x * canvas.width,
+                  landmarks[0].y * canvas.height - 10
+                );
+              }
             });
           }
 

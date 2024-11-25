@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { handleConnect } from "./components/picoControl";
+import { handleConnect } from "./utils/picoControl";
 
 export default function Home() {
   const router = useRouter();
