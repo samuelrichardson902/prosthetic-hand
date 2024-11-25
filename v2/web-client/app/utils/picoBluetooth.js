@@ -5,7 +5,7 @@ const UART_TX_CHAR_UUID = "6e400003-b5a3-f393-e0a9-e50e24dcca9e"; // TX characte
 let bluetoothDevice;
 let uartRxCharacteristic;
 
-async function connectToPicoW(setConnected, setConnecting) {
+async function connectToPicoW() {
   try {
     console.log("Requesting Bluetooth device...");
 
@@ -14,8 +14,6 @@ async function connectToPicoW(setConnected, setConnecting) {
       filters: [{ services: [UART_SERVICE_UUID] }], // Look for devices advertising the UART service
       optionalServices: [UART_SERVICE_UUID],
     });
-
-    setConnecting(true);
 
     console.log("Connecting to GATT server...");
     const server = await bluetoothDevice.gatt.connect();
@@ -28,25 +26,25 @@ async function connectToPicoW(setConnected, setConnecting) {
 
     console.log("Connected to Pico W!");
 
-    // Only set connected to true once the device is fully connected
-    setConnected(true); // Update the state to reflect a successful connection
+    //return true if connected successfully
+    return true;
   } catch (error) {
     // Handle cancellation or failure
     if (error.name === "NotFoundError") {
       console.log("User cancelled the Bluetooth device selection.");
       alert("You cancelled the Bluetooth device selection. Please try again.");
     } else if (error.name === "SecurityError") {
-      console.error("SecurityError: Bluetooth permission denied.");
+      console.log("SecurityError: Bluetooth permission denied.");
       alert("Bluetooth permission denied. Please check your browser settings.");
     } else {
-      console.error("Error connecting to Pico W:", error);
+      console.log("Error connecting to Pico W:", error);
       alert(
         "Failed to connect to Pico W. Please check if your Pico W is powered on and within range."
       );
     }
 
-    // Ensure the connected state is set to false if there was an error
-    setConnected(false); // Update the state to reflect the failed connection attempt
+    //return false if connection fails
+    return false;
   }
 }
 
@@ -62,11 +60,11 @@ async function sendCommand(command) {
     await uartRxCharacteristic.writeValue(encoder.encode(command));
     console.log("Command sent successfully.");
   } catch (error) {
-    console.error("Error sending command:", error);
+    console.log("Error sending command:", error);
   }
 }
 
-function disconnectFromPicoW(setConnected) {
+function disconnectFromPicoW() {
   if (!bluetoothDevice) {
     console.log("No device to disconnect.");
     return;
@@ -78,9 +76,6 @@ function disconnectFromPicoW(setConnected) {
   } else {
     console.log("Device already disconnected.");
   }
-
-  // Ensure the connection state is set to false when disconnected
-  setConnected(false); // Update the state to false when disconnected
 }
 
 export { connectToPicoW, sendCommand, disconnectFromPicoW };
