@@ -15,7 +15,8 @@ const HandVisualization = ({ handStates }) => {
                 }`}
               >
                 {fingerState.finger}:{" "}
-                {fingerState.extended ? "Extended" : "Closed"}
+                {fingerState.extended ? "Extended" : "Closed"}{" "}
+                {fingerState.jointAngle}
               </div>
             ))}
           </div>

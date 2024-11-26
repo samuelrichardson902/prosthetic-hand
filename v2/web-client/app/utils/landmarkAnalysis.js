@@ -25,15 +25,15 @@ function getFingerStates(handData) {
 
     // Create vectors
     const fingerVector = {
-      x: tip.x - mcp.x,
-      y: tip.y - mcp.y,
-      z: tip.z - mcp.z,
-    };
-
-    const baseJointVector = {
       x: pip.x - mcp.x,
       y: pip.y - mcp.y,
       z: pip.z - mcp.z,
+    };
+
+    const baseJointVector = {
+      x: dip.x - pip.x,
+      y: dip.y - pip.y,
+      z: dip.z - pip.z,
     };
 
     // Check distances between joints
@@ -47,15 +47,38 @@ function getFingerStates(handData) {
 
     // Thumb has different landmarks, so special case
     if (finger.name === "Thumb") {
-      return fingerAngle > 140 && mcpToTipDist > mcpToPipDist;
+      return fingerAngle < 30;
     }
 
     // For other fingers, check if tip is significantly further from MCP
     // and the angle is large
-    return (
-      fingerAngle > 150 &&
-      mcpToTipDist > (mcpToPipDist + pipToDipDist + dipToTipDist) * 0.5
-    );
+    return fingerAngle < 55;
+  }
+
+  function fingerJointAngle(landmarks, finger) {
+    const { tipIdx, mcpIdx, pipIdx, dipIdx } = finger;
+    const tip = landmarks[tipIdx];
+    const dip = landmarks[dipIdx];
+    const pip = landmarks[pipIdx];
+    const mcp = landmarks[mcpIdx];
+
+    // Create vectors
+    const fingerVector = {
+      x: pip.x - mcp.x,
+      y: pip.y - mcp.y,
+      z: pip.z - mcp.z,
+    };
+
+    const baseJointVector = {
+      x: dip.x - pip.x,
+      y: dip.y - pip.y,
+      z: dip.z - pip.z,
+    };
+
+    // Check angle between finger vector and base joint vector
+    const fingerAngle = angle(fingerVector, baseJointVector);
+
+    return fingerAngle;
   }
 
   return handData.map(({ landmarks, handType, confidence }) => {
@@ -102,6 +125,7 @@ function getFingerStates(handData) {
       confidence,
       states: fingers.map((finger) => ({
         finger: finger.name,
+        jointAngle: fingerJointAngle(landmarks, finger),
         extended: isFingerExtended(landmarks, finger),
       })),
     };
