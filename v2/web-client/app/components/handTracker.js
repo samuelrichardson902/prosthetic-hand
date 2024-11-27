@@ -233,23 +233,14 @@ const HandTracker = ({
   }, []);
 
   return (
-    <div className="flex flex-col items-center gap-4 p-4">
-      <h1 className="text-2xl font-bold">Hand Tracking</h1>
+    <div className="hand-tracker-container">
+      <h1 className="hand-tracker-title">Hand Tracking</h1>
 
-      {error && (
-        <div className="p-4 bg-red-100 text-red-600 rounded-md w-full max-w-2xl">
-          {error}
-        </div>
-      )}
+      {error && <div className="error-message">{error}</div>}
 
-      <div className="relative w-full max-w-2xl aspect-video bg-gray-900 rounded-lg overflow-hidden">
-        <video
-          ref={videoRef}
-          className="absolute inset-0 w-full h-full"
-          playsInline
-          autoPlay
-        />
-        <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
+      <div className="video-container">
+        <video ref={videoRef} className="video-element" playsInline autoPlay />
+        <canvas ref={canvasRef} className="canvas-element" />
       </div>
     </div>
   );

@@ -90,3 +90,128 @@ button.disconnect:hover {
     height: 40px;
   }
 }
+
+.demo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.demo-inner {
+  width: 100%;
+  max-width: 640px;
+}
+
+.demo-button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.demo-button {
+  width: 100%;
+  background-color: #3b82f6; /* Tailwind's blue-500 */
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem; /* Tailwind's rounded */
+  transition: background-color 0.3s ease;
+}
+
+.demo-button:hover {
+  background-color: #2563eb; /* Tailwind's blue-600 */
+}
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.home-inner {
+  width: 100%;
+  max-width: 640px;
+}
+
+.home-button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.home-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.home-button {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem; /* Tailwind's rounded */
+  color: white;
+}
+
+.green-button {
+  background-color: #22c55e; /* Tailwind's green-500 */
+}
+
+.green-button:hover {
+  background-color: #16a34a; /* Tailwind's green-600 */
+}
+
+.red-button {
+  background-color: #ef4444; /* Tailwind's red-500 */
+}
+
+.red-button:hover {
+  background-color: #dc2626; /* Tailwind's red-600 */
+}
+
+.hand-tracker-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.hand-tracker-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.error-message {
+  padding: 1rem;
+  background-color: #fee2e2; /* Tailwind's red-100 */
+  color: #b91c1c; /* Tailwind's red-600 */
+  border-radius: 0.375rem; /* Tailwind's rounded */
+  width: 100%;
+  max-width: 640px;
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  aspect-ratio: 16 / 9; /* Maintain aspect ratio */
+  background-color: #1f2937; /* Tailwind's gray-900 */
+  border-radius: 0.375rem; /* Tailwind's rounded */
+  overflow: hidden;
+}
+
+.video-element {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.canvas-element {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}

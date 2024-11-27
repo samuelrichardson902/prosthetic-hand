@@ -7,24 +7,21 @@ import HandVisualization from "../components/handVisualizer";
 
 export default function DemoPage() {
   const router = useRouter();
-  const [hands, setHands] = useState(null);
+  const [handsData, setHandsData] = useState(null);
   const [fingerStates, setFingerStates] = useState(null);
 
-  const processHandLandmarks = (hands) => {
-    setHands(hands);
-    const states = getFingerStates(hands);
+  const processHandLandmarks = (handsData) => {
+    setHandsData(handsData);
+    const states = getFingerStates(handsData);
     setFingerStates(states);
     console.log(states);
   };
 
   return (
-    <div className="flex flex-col items-center gap-6 p-4">
-      <div className="w-full max-w-2xl">
-        <div className="flex flex-col gap-4">
-          <button
-            onClick={() => router.push("/")}
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
-          >
+    <div className="demo-container">
+      <div className="demo-inner">
+        <div className="demo-button-container">
+          <button onClick={() => router.push("/")} className="demo-button">
             Back to Home
           </button>
 

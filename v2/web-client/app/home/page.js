@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { handleLightToggle, handleDisconnect } from "../utils/picoControl";
 import HandTracker from "../components/handTracker";
 import { getFingerStates } from "../utils/landmarkAnalysis";
+import HandVisualization from "../components/handVisualizer";
 
 export default function Home() {
   const router = useRouter();
@@ -27,19 +28,19 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-6 p-4">
-      <div className="w-full max-w-2xl">
-        <div className="flex flex-col gap-4">
-          <div className="flex gap-4">
+    <div className="home-container">
+      <div className="home-inner">
+        <div className="home-button-container">
+          <div className="home-buttons">
             <button
               onClick={handleLightToggle}
-              className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded"
+              className="home-button green-button"
             >
               Toggle LED
             </button>
             <button
               onClick={handleDisconnectAttempt}
-              className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
+              className="home-button red-button"
             >
               Disconnect
             </button>
