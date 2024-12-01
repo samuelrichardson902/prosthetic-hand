@@ -12,7 +12,7 @@ export default function Home() {
 
   // Add a last send time tracker
   const lastSendTime = { current: 0 };
-  const SEND_INTERVAL = 1000; // 100ms minimum between sends
+  const SEND_INTERVAL = 100; // 100ms minimum between sends
 
   const handleDisconnectAttempt = async () => {
     try {
