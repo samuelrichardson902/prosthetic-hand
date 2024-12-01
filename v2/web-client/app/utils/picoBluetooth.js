@@ -64,13 +64,14 @@ async function sendCommand(command) {
   }
 }
 
-function disconnectFromPicoW() {
+async function disconnectFromPicoW() {
   if (!bluetoothDevice) {
     console.log("No device to disconnect.");
     return;
   }
 
   if (bluetoothDevice.gatt.connected) {
+    await sendCommand("OFF"); // Turn off the LED before disconnecting
     bluetoothDevice.gatt.disconnect();
     console.log("Disconnected from Pico W.");
   } else {

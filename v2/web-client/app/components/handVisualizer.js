@@ -23,20 +23,6 @@ const HandVisualization = ({ handStates }) => {
                   {fingerState.finger}:{" "}
                   {fingerState.extended ? "Extended" : "Closed"}
                 </h4>
-                <dl className="pl-4 text-sm">
-                  <dt className="text-gray-500">DIP Angle:</dt>
-                  <dd className="text-gray-700">
-                    {fingerState.jointAngles.dipAngle.toFixed(2)}°
-                  </dd>
-                  <dt className="text-gray-500">PIP Angle:</dt>
-                  <dd className="text-gray-700">
-                    {fingerState.jointAngles.pipAngle.toFixed(2)}°
-                  </dd>
-                  <dt className="text-gray-500">MCP Angle:</dt>
-                  <dd className="text-gray-700">
-                    {fingerState.jointAngles.mcpAngle.toFixed(2)}°
-                  </dd>
-                </dl>
               </div>
             ))}
           </div>

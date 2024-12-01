@@ -23,23 +23,13 @@ const handleConnect = async () => {
   }
 };
 
-const handleLightToggle = async () => {
-  if (!isConnected) {
-    throw new Error("Device not connected");
-  }
-
-  try {
-    if (isLightOn) {
-      await sendCommand("OFF");
-      isLightOn = false;
-    } else {
-      await sendCommand("ON");
-      isLightOn = true;
+const sendPiData = async (data) => {
+  if (isConnected) {
+    try {
+      await sendCommand(data);
+    } catch (error) {
+      console.error("Data send error:", error);
     }
-    return isLightOn;
-  } catch (error) {
-    console.error("Light toggle error:", error);
-    throw error;
   }
 };
 
@@ -59,14 +49,4 @@ const handleDisconnect = async () => {
   }
 };
 
-// Getter functions to check current state
-const getConnectionStatus = () => isConnected;
-const getLightStatus = () => isLightOn;
-
-export {
-  handleConnect,
-  handleLightToggle,
-  handleDisconnect,
-  getConnectionStatus,
-  getLightStatus,
-};
+export { handleConnect, sendPiData, handleDisconnect };

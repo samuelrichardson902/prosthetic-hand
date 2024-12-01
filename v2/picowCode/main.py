@@ -1,10 +1,9 @@
 import bluetooth
-import random
-import struct
 import time
 from machine import Pin
 from ble_advertising import advertising_payload
 from micropython import const
+import json
 
 # BLE event constants
 _IRQ_CENTRAL_CONNECT = const(1)
@@ -67,7 +66,7 @@ class BLESimplePeripheral:
     def is_connected(self):
         return len(self._connections) > 0
 
-    def _advertise(self, interval_us=500000):
+    def _advertise(self, interval_us=100000):
         print("Starting advertising")
         self._ble.gap_advertise(interval_us, adv_data=self._payload)
 
@@ -81,24 +80,51 @@ def demo():
     p = BLESimplePeripheral(ble, name="RoboHand")
 
     def on_rx(v):
-        """Callback for receiving data."""
-        print("RX", v)
-        if v == b'ON':
-            print("Turning LED ON")
-            led_onboard.on()
-        elif v == b'OFF':
-            print("Turning LED OFF")
-            led_onboard.off()
-        else:
-            print("Unknown command received")
+        """Callback for receiving hand data."""
+        try:
+            # Decode the received data
+            handData = v.decode('utf-8')
+            
+            # Check if the data is simply "ON" or "OFF"
+            if handData == "ON":
+                led_onboard.on()
+                print("LED ON due to 'ON' command")
+                return
+            elif handData == "OFF":
+                led_onboard.off()
+                print("LED OFF due to 'OFF' command")
+                return
+            
+            # Split the data into individual hand data
+            hand_data_list = handData.split(',')
+            
+            any_finger_extended = False
+            
+            for hand_data in hand_data_list:
+                if len(hand_data) == 6:  # Each hand data should be 6 characters long (1 for hand type + 5 for finger states)
+                    hand_type = hand_data[0]
+                    finger_states = hand_data[1:6]
+                    
+                    print(f"Hand type: {hand_type}, Finger states: {finger_states}")
+
+                    # Check if any finger is extended (1 in the string)
+                    if '1' in finger_states:
+                        any_finger_extended = True
+                        print(f"At least one finger is extended on {hand_type} hand")
+
+            if any_finger_extended:
+                led_onboard.on()  # At least one finger is extended on any hand
+                print("At least one finger is extended on any hand - LED ON")
+            else:
+                led_onboard.off()  # All fingers are closed on all hands
+                print("All fingers are closed on all hands - LED OFF")
+
+        except Exception as e:
+            print(f"Unexpected error processing hand data: {e}")
+            led_onboard.off()  # Turn off LED on any error
 
     p.on_write(on_rx)
 
-    while True:
-        # Periodically send some status data (optional)
-        if p.is_connected():
-            p.send("LED is ON" if led_onboard.value() else "LED is OFF")
-        time.sleep_ms(1000)
 
 
 if __name__ == "__main__":

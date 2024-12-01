@@ -7,14 +7,11 @@ import HandVisualization from "../components/handVisualizer";
 
 export default function DemoPage() {
   const router = useRouter();
-  const [handsData, setHandsData] = useState(null);
   const [fingerStates, setFingerStates] = useState(null);
 
   const processHandLandmarks = (handsData) => {
-    setHandsData(handsData);
     const states = getFingerStates(handsData);
     setFingerStates(states);
-    console.log(states);
   };
 
   return (
